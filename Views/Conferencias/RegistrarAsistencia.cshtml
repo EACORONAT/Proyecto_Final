@@ -1,0 +1,103 @@
+﻿@model MvcCongresoTIC.Models.RegistroConferenciaVM
+
+@{
+    ViewData["Title"] = "Registro";
+}
+
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Logos en la barra de navegación -->
+            <div class="d-flex align-items-center">
+                <img src="~/images/itl_logo.jpeg" alt="Logo de la Institución" width="50" height="50" class="mr-2">
+                <img src="~/images/congreso_logo.png" alt="Logo del Congreso" width="70" height="50" class="ms-2">
+            </div>
+
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark font-weight-bold ms-2" asp-area="" asp-controller="Home" asp-action="Inicio">
+                            <b>Inicio</b>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Home" asp-action="Participantes">
+                            <b>Participantes</b>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Home" asp-action="Registro">
+                            <b>Registro</b>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Home" asp-action="Conferencias">
+                            <b>Conferencias</b>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+@*----------------------------------------------------------------------------------------------------------------------------------------*@
+
+<h2>Registro a Conferencia</h2>
+<p><b>Conferencia:</b> @Model.ConferenciaTitulo</p>
+
+<form asp-action="RegistrarAsistencia">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <input type="hidden" asp-for="ConferenciaId" />
+
+    <div class="form-group">
+        <label asp-for="ParticipanteId">Participante:</label>
+        @if (Model.Participantes != null && Model.Participantes.Any())
+        {
+            <select asp-for="ParticipanteId" asp-items="@(new SelectList(Model.Participantes, "Id", "NombreCompleto"))" class="form-control">
+                <option value="">Selecciona un participante</option>
+            </select>
+        }
+        else
+        {
+            <p>No hay participantes disponibles.</p>
+        }
+        <span asp-validation-for="ParticipanteId" class="text-danger"></span>
+    </div>
+    <p></p>
+
+    <div class="form-group">
+        <label>
+            <input type="checkbox" asp-for="ConfirmacionAsistencia" />
+            Confirmar Asistencia
+        </label>
+    </div>
+    <p></p>
+
+    <div class="form-group text-center">
+        <div class="btn-group" role="group">
+            <a asp-controller="Conferencias" asp-action="Index" class="btn btn-dark btn-block"><b>Regresar</b></a>
+            <button type="submit" class="btn btn-primary"><b>Guardar</b></button>            
+        </div>
+    </div>
+    <p></p>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+@if (TempData["Alerta"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Alerta"]
+    </div>
+}

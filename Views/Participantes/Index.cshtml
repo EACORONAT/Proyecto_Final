@@ -1,0 +1,124 @@
+﻿@model IEnumerable<MvcCongresoTIC.Models.Participante>
+
+@{
+    ViewData["Title"] = "Participantes";
+}
+
+<style>
+    .custom-width-btn {
+        width: 90%;
+        display: block;
+        margin: auto;
+    }
+</style>
+
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Logos en la barra de navegación -->
+            <div class="d-flex align-items-center">
+                <img src="~/images/itl_logo.jpeg" alt="Logo de la Institución" width="50" height="50" class="mr-2">
+                <img src="~/images/congreso_logo.png" alt="Logo del Congreso" width="70" height="50" class="ms-2">
+            </div>
+
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">                        
+                        <a class="nav-link text-dark font-weight-bold ms-2" asp-area="" asp-controller="Home" asp-action="Inicio">
+                            <b>Inicio</b>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Home" asp-action="Participantes">
+                            <b>Participantes</b>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Home" asp-action="Registro">
+                            <b>Registro</b>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Home" asp-action="Conferencias">
+                            <b>Conferencias</b>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+@*------------------------------------------------------------------------------------------------------------------------------*@
+
+<div class="form-group row no-gutters text-center">
+    <a asp-controller="Participantes" asp-action="Create" class="btn btn-success text-white custom-width-btn"><b>Agregar</b></a>
+</div>
+<p></p>
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@Url.Content($"~/images/A-{item.AvatarId}.jpg")" class="card-img-top" alt="Avatar">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Nombre @item.Apellidos</h5>
+                        <p class="card-text">
+                            Twitter: <a href="https://twitter.com/@item.UTwitter" target="_blank">@item.UTwitter</a><br>
+                            Ocupación: @item.Ocupacion
+                        </p>
+                        <div class="form-group row no-gutters text-center">
+                            <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning text-dark custom-width-btn"><b>Editar Participante</b></a>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No hay participantes para mostrar.</p>
+}
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        // Función para mostrar la vista previa del avatar seleccionado
+        function showAvatarPreview() {
+            var avatarId = $("#avatarSelect").val();
+            if (avatarId !== "") {
+                var avatarUrl = "/images/A-" + avatarId + ".jpg"; 
+                $("#avatarPreview").attr("src", avatarUrl);
+                $("#avatarPreviewContainer").show();
+            } else {
+                $("#avatarPreviewContainer").hide();
+            }
+        }
+
+        // Llama a la función al cambiar la selección del avatar
+        $(document).ready(function () {
+            showAvatarPreview();
+            $("#avatarSelect").change(function () {
+                showAvatarPreview();
+            });
+        });
+    </script>
+
+    <style>
+        .custom-width-btn {
+            width: 98%;
+            display: block;
+            margin: auto;
+        }
+    </style>
+}

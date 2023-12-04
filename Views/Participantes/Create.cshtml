@@ -1,0 +1,176 @@
+﻿@model MvcCongresoTIC.Models.Participante
+
+@{
+    ViewData["Title"] = "Registro";
+}
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Logos en la barra de navegación -->
+            <div class="d-flex align-items-center">
+                <img src="~/images/itl_logo.jpeg" alt="Logo de la Institución" width="50" height="50" class="mr-2">
+                <img src="~/images/congreso_logo.png" alt="Logo del Congreso" width="70" height="50" class="ms-2">
+            </div>
+
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">                        
+                        <a class="nav-link text-dark font-weight-bold ms-2" asp-area="" asp-controller="Home" asp-action="Inicio">
+                            <b>Inicio</b>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Home" asp-action="Participantes">
+                            <b>Participantes</b>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Home" asp-action="Registro">
+                            <b>Registro</b>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Home" asp-action="Conferencias">
+                            <b>Conferencias</b>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+@*----------------------------------------------------------------------------------------------------------------------------------------*@
+
+<h1>Registro de Participante</h1>
+
+<hr />
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Nombre" class="control-label">Nombres:</label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Apellidos" class="control-label">Apellidos:</label>
+                        <input asp-for="Apellidos" class="form-control" />
+                        <span asp-validation-for="Apellidos" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UTwitter" class="control-label">Usuario de Twitter:</label>
+                        <input asp-for="UTwitter" class="form-control" />
+                        <span asp-validation-for="UTwitter" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Ocupacion" class="control-label">Ocupación:</label>
+                        <input asp-for="Ocupacion" class="form-control" />
+                        <span asp-validation-for="Ocupacion" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Selecciona un Avatar:</label>
+                        <p></p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            @foreach (var avatar in GetAvatars())
+                            {
+                                <label class="avatar-label">
+                                    <input type="radio" asp-for="AvatarId" value="@avatar.Value" class="avatar-radio" />
+                                    <img src="@Url.Content($"~/images/A-{avatar.Value}.jpg")" alt="Avatar" class="avatar-image avatar-selector" />
+                                </label>
+                            }
+                        </div>
+                        <span asp-validation-for="AvatarId" class="text-danger"></span>
+                    </div>
+                    <p></p>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" asp-for="TYC" />
+                            Leí y acepto los términos y condiciones
+                        </label>
+                    </div>
+                    <p></p>
+
+                    <div class="form-group text-center">
+                        <div class="btn-group" role="group">
+                            <a asp-controller="Home" asp-action="Participantes" class="btn btn-dark btn-block"><b>Regresar</b></a>
+                            <input type="submit" value="Guardar" class="btn btn-success btn-block" style="font-weight: bold;" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            // Agrega un evento de cambio a los radio buttons con la clase avatar-radio
+            $('.avatar-radio').change(function () {
+                // Remueve la clase 'selected' de todas las imágenes
+                $('.avatar-selector').removeClass('selected');
+
+                // Agrega la clase 'selected' solo a la imagen seleccionada
+                if ($(this).is(':checked')) {
+                    $(this).closest('.avatar-label').find('.avatar-selector').addClass('selected');
+                }
+            });
+        });
+    </script>
+
+    <style>
+        .avatar-selector.selected {
+            border: 3px solid #000000; /* Cambia el color del borde según tus preferencias */
+        }
+        .avatar-label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .avatar-image {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 10px; /* Ajusta el valor según tus preferencias para redondear los bordes */
+            margin-right: 10px; /* Ajusta el valor para controlar el espacio entre las imágenes */
+        }
+        .avatar-radio {
+            display: none; /* Oculta los radio buttons, pero los labels siguen siendo clicables */
+        }
+        .avatar-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+}   
+
+@functions {
+    public List<SelectListItem> GetAvatars()
+    {
+        return new List<SelectListItem>
+        {
+            new SelectListItem { Value = "1", Text = "Opcion 1" },
+            new SelectListItem { Value = "2", Text = "Opcion 2" },
+            new SelectListItem { Value = "3", Text = "Opcion 3" },
+            new SelectListItem { Value = "4", Text = "Opcion 4" },
+            new SelectListItem { Value = "5", Text = "Opcion 5" },
+            new SelectListItem { Value = "6", Text = "Opcion 6" },
+        };
+    }
+}

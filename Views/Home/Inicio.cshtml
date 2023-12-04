@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<style>
+    body {
+        background-color: #f2f2f2; /* Color gris para el fondo de la página */
+    }
+
+    .card {
+        background-color: #ffffff; /* Color blanco para el fondo de la tarjeta */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para resaltar la tarjeta */
+    }
+    .custom-width-btn {
+            width: 90%;
+            display: block;
+            margin: auto;
+    }
+</style>
+
+<div class="d-flex align-items-center justify-content-center vh-100">
+    <div class="card text-center">
+        <div class="card-body">
+            <h2 class="card-title mb-5">Congreso de Tecnologías de la Información</h2>
+
+            <div class="d-flex justify-content-between align-items-center flex-column flex-md-row mb-5">
+                <img src="~/images/itl_logo.jpeg" alt="Logo de la Institución" width="250" height="250" />
+                <img src="~/images/congreso_logo.png" alt="Logo del Congreso" width="350" height="250" />
+            </div>
+            <p></p>
+
+            <div class="form-group row no-gutters text-center">
+                <a asp-controller="Participantes" asp-action="Index" class="btn btn-primary text-white custom-width-btn"><b>Entrar</b></a>
+            </div>            
+        </div>
+    </div>
+</div>
